@@ -96,7 +96,7 @@ void console_putc(char c)
         currentRow++;
         if (currentRow >= MAX_ROWS)
         {
-            scroll_screen(); // Scroll if the row exceeds the screen height
+            scroll_screen();
         }
     }
     else if (c == '\r')
