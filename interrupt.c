@@ -14,7 +14,7 @@ asm (
     "   push %esp\n"        //address of stack top = addr of eax
     "   cld\n"      //clear direction flag; C expects this
     "   call _highlevel_handler\n"
-    "   hlt\n"
+    "   hlt\n"    //halting the program from running 
     "   addl $4, %esp\n"    //discard parameter for C
     "   pop %eax\n"
     "   pop %ebx\n"
