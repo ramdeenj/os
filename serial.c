@@ -1,5 +1,6 @@
 #include "serial.h"
 #include "utils.h"
+#include "console.h"
 
 #define SERIAL_STATUS 0x3fd
 #define SERIAL_DATA 0x3f8

@@ -3,28 +3,34 @@ __asm__(
     "_start:\n"
     "mov $0x10000,%esp\n"
     "push %ebx\n"
-    "call _kmain"
+    "call _kmain\n"
+    "hlt\n"
 );
 
 #include "serial.h"
 #include "console.h"
 #include "kprintf.h"
 #include "utils.h"
+#include "interrupt.h"
 
 struct MultibootInfo machineInfo;
 
-void sweet_scroll();
+void sweet();
 
 void kmain(struct MultibootInfo* mbi)
 {
     serial_init();
     console_init(mbi);
 
-    // Call the scrolling function for the assignment
-    sweet_scroll();
+   // Initialize interrupts
+    interrupt_init();
+
+    sweet();
 
     // Output "\nDONE\n" to the serial port
     serial_puts("\nDONE\n");
 
     while(1);
+    
 }
+

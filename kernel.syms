@@ -1,119 +1,163 @@
  kernel
 
- Timestamp is 66f3100e (Tue Sep 24 15:16:30 2024)
+ Timestamp is 66f561c5 (Thu Sep 26 09:29:41 2024)
 
  Preferred load address is 0000000000100000
 
  Start         Length     Name                   Class
- 0001:00000000 000039d3H .text                   CODE
- 0002:00000000 000052a8H .rdata                  DATA
- 0003:00000000 00000194H .data                   DATA
- 0003:00000194 00000098H .bss                    DATA
+ 0001:00000000 00003c03H .text                   CODE
+ 0002:00000000 00005370H .rdata                  DATA
+ 0003:00000000 000001c0H .data                   DATA
+ 0003:000001c0 00000238H .bss                    DATA
 
   Address         Publics by Value              Rva+Base               Lib:Object
 
- 0001:00000000       _set_pixel                 0000000000101000     console.c.o
- 0001:00000040       _draw_character_at_cell    0000000000101040     console.c.o
- 0001:00000130       _scroll_screen             0000000000101130     console.c.o
- 0001:00000270       _console_putc              0000000000101270     console.c.o
- 0001:000004e0       _console_init              00000000001014e0     console.c.o
- 0001:000006f0       _start                     00000000001016f0     kmain.c.o
- 0001:00000700       _kmain                     0000000000101700     kmain.c.o
- 0001:00000730       _va_end                    0000000000101730     kprintf.c.o
- 0001:00000740       _stbsp_set_separators      0000000000101740     kprintf.c.o
- 0001:00000760       _stbsp_vsprintfcb          0000000000101760     kprintf.c.o
- 0001:00002f90       _stbsp_sprintf             0000000000103f90     kprintf.c.o
- 0001:00003020       _stbsp_vsnprintf           0000000000104020     kprintf.c.o
- 0001:00003250       _stbsp_snprintf            0000000000104250     kprintf.c.o
- 0001:000032c0       _stbsp_vsprintf            00000000001042c0     kprintf.c.o
- 0001:00003310       _kprintf                   0000000000104310     kprintf.c.o
- 0001:000033c0       _ksprintf                  00000000001043c0     kprintf.c.o
- 0001:00003420       _ksnprintf                 0000000000104420     kprintf.c.o
- 0001:00003490       _serial_init               0000000000104490     serial.c.o
- 0001:000034a0       _serial_putc               00000000001044a0     serial.c.o
- 0001:000034f0       _serial_puts               00000000001044f0     serial.c.o
- 0001:00003530       _sweet_scroll              0000000000104530     testsuite (1).c.o
- 0001:000035a0       _sweet_color               00000000001045a0     testsuite (1).c.o
- 0001:00003670       _sweet_both                0000000000104670     testsuite (1).c.o
- 0001:00003790       _sweet                     0000000000104790     testsuite.c.o
- 0001:00003940       _outb                      0000000000104940     utils.c.o
- 0001:00003960       _inb                       0000000000104960     utils.c.o
- 0001:00003980       _kmemcpy                   0000000000104980     utils.c.o
- 0002:000052a8       ??_C@_01BGIBIIDJ@?$HP?$AA@ 000000000010a2a8     testsuite.c.o
- 0002:000052aa       ??_C@_0CB@FGPELLHG@Saruman?3The_Many_Colored?$HO?$HO?$HO?$HO?$HO?$HO?$HO?$HO@ 000000000010a2aa     testsuite (1).c.o
- 0002:000052cb       ??_C@_08CKLMDEPE@No?5float?$AA@ 000000000010a2cb     kprintf.c.o
- 0002:000052d4       ??_C@_0N@EALGMGIE@?$BL?$FL37m?$BL?$FL44m?$CFs?$AA@ 000000000010a2d4     testsuite (1).c.o
- 0002:000052de       ??_C@_02DKCKIIND@?$CFs?$AA@ 000000000010a2de     testsuite (1).c.o
- 0002:000052e1       ??_C@_04MLLLIHIP@null?$AA@ 000000000010a2e1     kprintf.c.o
- 0002:000052e6       ??_C@_0N@OOINPJOD@?$BL?$FL?$CFdm?$BL?$FL?$CFdm?$CFc?$AA@ 000000000010a2e6     testsuite (1).c.o
- 0002:000052f0       ??_C@_02HAOIJKIC@?$CFc?$AA@ 000000000010a2f0     testsuite.c.o
- 0002:000052f3       ??_C@_01BIAFAFID@F?$AA@    000000000010a2f3     testsuite.c.o
- 0002:000052f5       ??_C@_01DDCIFGEA@E?$AA@    000000000010a2f5     testsuite.c.o
- 0002:000052f7       ??_C@_01CKDDGHAB@D?$AA@    000000000010a2f7     testsuite.c.o
- 0002:000052f9       ??_C@_01GFHCPBMG@C?$AA@    000000000010a2f9     testsuite.c.o
- 0002:000052fb       ??_C@_01HMGJMAIH@B?$AA@    000000000010a2fb     testsuite.c.o
- 0002:000052fd       ??_C@_01FHEEJDEE@A?$AA@    000000000010a2fd     testsuite.c.o
- 0002:000052ff       ??_C@_0LF@EGOCENNO@And?5for?5the?5support?5of?5this?5Decl@ 000000000010a2ff     testsuite (1).c.o
- 0002:000053b4       ??_C@_0CIC@HDHIGGAH@When?5in?5the?5course?5of?5human?4?5No?4@ 000000000010a3b4     testsuite.c.o
- 0002:00005636       ??_C@_0PNI@JOHOOPOJ@?$AMIN?5CONGRESS?0?5July?54?0?51776?4?6?6The@ 000000000010a636     testsuite (1).c.o
- 0002:000064f8       ??_C@_0BBG@GGILKLNE@and?5to?5do?5all?5other?5Acts?5and?5Thi@ 000000000010b4f8     testsuite (1).c.o
- 0002:0000660e       ??_C@_0BH@OODNFPIC@?$AN?$CFd?5?$CFd?5?$CFd?5?$CFd?5?$CFd?$CFc?$CFd?4?4?4?$AA@ 000000000010b60e     testsuite (1).c.o
- 0002:00006625       ??_C@_01NBENCBCI@?$CK?$AA@ 000000000010b625     testsuite.c.o
- 0002:00006627       ??_C@_01EPMOAMKG@$?$AA@    000000000010b627     testsuite.c.o
- 0002:00006629       ??_C@_01IPJKGB@?$CD?$AA@   000000000010b629     testsuite.c.o
- 0002:0000662b       ??_C@_01DCLJPIOD@?$CB?$AA@ 000000000010b62b     testsuite.c.o
- 0002:0000662d       ??_C@_0PKJ@MOBOGEGH@?$AMIN?5CONGRESS?0?5July?54?0?51776?4?6?6The@ 000000000010b62d     testsuite (1).c.o
- 0002:000075d6       ??_C@_01LIIJDEN@?$AN?$AA@  000000000010c5d6     testsuite.c.o
- 0002:000075d8       ??_C@_0BL@FDIPCPKE@Framebuffer?5address?3?50x?$CFx?6?$AA@ 000000000010c5d8     console.c.o
- 0002:000075f3       ??_C@_0M@MGAGFIPH@Height?3?5?$CFu?6?$AA@ 000000000010c5f3     console.c.o
- 0002:000075ff       ??_C@_0L@CCNKPCLM@Width?3?5?$CFu?6?$AA@ 000000000010c5ff     console.c.o
- 0002:0000760a       ??_C@_0L@NBFPJNHM@Pitch?3?5?$CFu?6?$AA@ 000000000010c60a     console.c.o
- 0002:00007615       ??_C@_0CA@BNOKJHKF@Invalid?5framebuffer?5dimensions?6?$AA@ 000000000010c615     console.c.o
- 0002:00007635       ??_C@_0BF@BEBBMPJD@Framebuffer?5is?5NULL?6?$AA@ 000000000010c635     console.c.o
- 0002:0000764a       ??_C@_06HPPMHAIC@?6DONE?6?$AA@ 000000000010c64a     kmain.c.o
- 0002:00007651       ??_C@_0HML@DNNPFEHB@?$AMIn?5every?5stage?5of?5these?5Oppress@ 000000000010c651     testsuite (1).c.o
- 0002:00007e1c       ??_C@_0BL@KCJAAGIG@Screen?5filled?5with?5white?4?6?$AA@ 000000000010ce1c     console.c.o
- 0002:00007e35       ??_C@_01EEMJAFIK@?6?$AA@   000000000010ce35     testsuite.c.o
- 0003:000000fc       _decl3                     000000000010d0fc     testsuite (1).c.o
- 0003:00000100       _phrase                    000000000010d100     testsuite (1).c.o
- 0003:00000190       _bigstring                 000000000010d190     testsuite.c.o
- 0003:000001ac       _machineInfo               000000000010d1ac     kmain.c.o
- 0003:00000228       __fltused                  000000000010d228     kprintf.c.o
+ 0001:00000000       _lowlevel_handler0         0000000000101000     asmstubs.c.o
+ 0001:0000000c       _lowlevel_handler1         000000000010100c     asmstubs.c.o
+ 0001:00000018       _lowlevel_handler2         0000000000101018     asmstubs.c.o
+ 0001:00000024       _lowlevel_handler3         0000000000101024     asmstubs.c.o
+ 0001:00000030       _lowlevel_handler4         0000000000101030     asmstubs.c.o
+ 0001:0000003c       _lowlevel_handler5         000000000010103c     asmstubs.c.o
+ 0001:00000048       _lowlevel_handler6         0000000000101048     asmstubs.c.o
+ 0001:00000054       _lowlevel_handler7         0000000000101054     asmstubs.c.o
+ 0001:00000060       _lowlevel_handler8         0000000000101060     asmstubs.c.o
+ 0001:00000067       _lowlevel_handler9         0000000000101067     asmstubs.c.o
+ 0001:00000073       _lowlevel_handler10        0000000000101073     asmstubs.c.o
+ 0001:0000007a       _lowlevel_handler11        000000000010107a     asmstubs.c.o
+ 0001:00000081       _lowlevel_handler12        0000000000101081     asmstubs.c.o
+ 0001:00000088       _lowlevel_handler13        0000000000101088     asmstubs.c.o
+ 0001:0000008f       _lowlevel_handler14        000000000010108f     asmstubs.c.o
+ 0001:00000096       _lowlevel_handler15        0000000000101096     asmstubs.c.o
+ 0001:000000a2       _lowlevel_handler16        00000000001010a2     asmstubs.c.o
+ 0001:000000ae       _lowlevel_handler17        00000000001010ae     asmstubs.c.o
+ 0001:000000b5       _lowlevel_handler18        00000000001010b5     asmstubs.c.o
+ 0001:000000c1       _lowlevel_handler19        00000000001010c1     asmstubs.c.o
+ 0001:000000cd       _lowlevel_handler20        00000000001010cd     asmstubs.c.o
+ 0001:000000d9       _lowlevel_handler21        00000000001010d9     asmstubs.c.o
+ 0001:000000e5       _lowlevel_handler22        00000000001010e5     asmstubs.c.o
+ 0001:000000f1       _lowlevel_handler23        00000000001010f1     asmstubs.c.o
+ 0001:000000fd       _lowlevel_handler24        00000000001010fd     asmstubs.c.o
+ 0001:00000109       _lowlevel_handler25        0000000000101109     asmstubs.c.o
+ 0001:00000115       _lowlevel_handler26        0000000000101115     asmstubs.c.o
+ 0001:00000121       _lowlevel_handler27        0000000000101121     asmstubs.c.o
+ 0001:0000012d       _lowlevel_handler28        000000000010112d     asmstubs.c.o
+ 0001:00000139       _lowlevel_handler29        0000000000101139     asmstubs.c.o
+ 0001:00000145       _lowlevel_handler30        0000000000101145     asmstubs.c.o
+ 0001:00000151       _lowlevel_handler31        0000000000101151     asmstubs.c.o
+ 0001:0000015d       _lowlevel_handler32        000000000010115d     asmstubs.c.o
+ 0001:00000169       _lowlevel_handler33        0000000000101169     asmstubs.c.o
+ 0001:00000175       _lowlevel_handler34        0000000000101175     asmstubs.c.o
+ 0001:00000181       _lowlevel_handler35        0000000000101181     asmstubs.c.o
+ 0001:0000018d       _lowlevel_handler36        000000000010118d     asmstubs.c.o
+ 0001:00000199       _lowlevel_handler37        0000000000101199     asmstubs.c.o
+ 0001:000001a5       _lowlevel_handler38        00000000001011a5     asmstubs.c.o
+ 0001:000001b1       _lowlevel_handler39        00000000001011b1     asmstubs.c.o
+ 0001:000001bd       _lowlevel_handler40        00000000001011bd     asmstubs.c.o
+ 0001:000001c9       _lowlevel_handler41        00000000001011c9     asmstubs.c.o
+ 0001:000001d5       _lowlevel_handler42        00000000001011d5     asmstubs.c.o
+ 0001:000001e1       _lowlevel_handler43        00000000001011e1     asmstubs.c.o
+ 0001:000001ed       _lowlevel_handler44        00000000001011ed     asmstubs.c.o
+ 0001:000001f9       _lowlevel_handler45        00000000001011f9     asmstubs.c.o
+ 0001:00000205       _lowlevel_handler46        0000000000101205     asmstubs.c.o
+ 0001:00000211       _lowlevel_handler47        0000000000101211     asmstubs.c.o
+ 0001:0000021d       _lowlevel_handler48        000000000010121d     asmstubs.c.o
+ 0001:00000230       _set_pixel                 0000000000101230     console.c.o
+ 0001:00000270       _draw_character_at_cell    0000000000101270     console.c.o
+ 0001:00000360       _scroll_screen             0000000000101360     console.c.o
+ 0001:000004a0       _console_putc              00000000001014a0     console.c.o
+ 0001:00000710       _console_init              0000000000101710     console.c.o
+ 0001:00000920       _midlevel_handler          0000000000101920     interrupt.c.o
+ 0001:00000940       _interrupt_init            0000000000101940     interrupt.c.o
+ 0001:00000970       _gdt_init                  0000000000101970     interrupt.c.o
+ 0001:00000a40       _idt_inti                  0000000000101a40     interrupt.c.o
+ 0001:00000ad0       _highlevel_handler         0000000000101ad0     interrupt.c.o
+ 0001:00000ca0       _start                     0000000000101ca0     kmain.c.o
+ 0001:00000cb0       _kmain                     0000000000101cb0     kmain.c.o
+ 0001:00000cf0       _va_end                    0000000000101cf0     kprintf.c.o
+ 0001:00000d00       _stbsp_set_separators      0000000000101d00     kprintf.c.o
+ 0001:00000d20       _stbsp_vsprintfcb          0000000000101d20     kprintf.c.o
+ 0001:00003550       _stbsp_sprintf             0000000000104550     kprintf.c.o
+ 0001:000035e0       _stbsp_vsnprintf           00000000001045e0     kprintf.c.o
+ 0001:00003810       _stbsp_snprintf            0000000000104810     kprintf.c.o
+ 0001:00003880       _stbsp_vsprintf            0000000000104880     kprintf.c.o
+ 0001:000038d0       _kprintf                   00000000001048d0     kprintf.c.o
+ 0001:00003980       _ksprintf                  0000000000104980     kprintf.c.o
+ 0001:000039e0       _ksnprintf                 00000000001049e0     kprintf.c.o
+ 0001:00003a50       _serial_init               0000000000104a50     serial.c.o
+ 0001:00003a60       _serial_putc               0000000000104a60     serial.c.o
+ 0001:00003ab0       _serial_puts               0000000000104ab0     serial.c.o
+ 0001:00003af0       _sweet                     0000000000104af0     testsuite.c.o
+ 0001:00003b70       _outb                      0000000000104b70     utils.c.o
+ 0001:00003b90       _inb                       0000000000104b90     utils.c.o
+ 0001:00003bb0       _kmemcpy                   0000000000104bb0     utils.c.o
+ 0002:00005370       ??_C@_08CKLMDEPE@No?5float?$AA@ 000000000010a370     kprintf.c.o
+ 0002:00005379       ??_C@_04MLLLIHIP@null?$AA@ 000000000010a379     kprintf.c.o
+ 0002:0000537e       ??_C@_0BL@FDIPCPKE@Framebuffer?5address?3?50x?$CFx?6?$AA@ 000000000010a37e     console.c.o
+ 0002:00005399       ??_C@_09FJPKBJCH@Overflow?6?$AA@ 000000000010a399     interrupt.c.o
+ 0002:000053a3       ??_C@_0M@MGAGFIPH@Height?3?5?$CFu?6?$AA@ 000000000010a3a3     console.c.o
+ 0002:000053af       ??_C@_0L@CCNKPCLM@Width?3?5?$CFu?6?$AA@ 000000000010a3af     console.c.o
+ 0002:000053ba       ??_C@_0L@NBFPJNHM@Pitch?3?5?$CFu?6?$AA@ 000000000010a3ba     console.c.o
+ 0002:000053c5       ??_C@_0M@PMGNMNFN@Breakpoint?6?$AA@ 000000000010a3c5     interrupt.c.o
+ 0002:000053d1       ??_C@_0BA@ECEBHPHH@Segment?5absent?6?$AA@ 000000000010a3d1     interrupt.c.o
+ 0002:000053e1       ??_C@_0P@CMBNJKHF@General?5fault?6?$AA@ 000000000010a3e1     interrupt.c.o
+ 0002:000053f0       ??_C@_0N@CNFGHJMP@Stack?5fault?6?$AA@ 000000000010a3f0     interrupt.c.o
+ 0002:000053fd       ??_C@_0M@JIMIAIFM@Math?5fault?6?$AA@ 000000000010a3fd     interrupt.c.o
+ 0002:00005409       ??_C@_0O@NMBMAMF@Double?5fault?6?$AA@ 000000000010a409     interrupt.c.o
+ 0002:00005417       ??_C@_0M@DHKJDJPC@Page?5fault?6?$AA@ 000000000010a417     interrupt.c.o
+ 0002:00005423       ??_C@_0CA@BNOKJHKF@Invalid?5framebuffer?5dimensions?6?$AA@ 000000000010a423     console.c.o
+ 0002:00005443       ??_C@_0BA@NKCANEBM@No?5coprocessor?6?$AA@ 000000000010a443     interrupt.c.o
+ 0002:00005453       ??_C@_0BB@IFBKADCH@Alignment?5error?6?$AA@ 000000000010a453     interrupt.c.o
+ 0002:00005464       ??_C@_0P@ONJANBEJ@Control?5error?6?$AA@ 000000000010a464     interrupt.c.o
+ 0002:00005473       ??_C@_0P@HLPIIBCK@Virtual?5error?6?$AA@ 000000000010a473     interrupt.c.o
+ 0002:00005482       ??_C@_0M@KBCPOFIN@SIMD?5error?6?$AA@ 000000000010a482     interrupt.c.o
+ 0002:0000548e       ??_C@_0P@BILEMPBM@Hardware?1User?6?$AA@ 000000000010a48e     interrupt.c.o
+ 0002:0000549d       ??_C@_0BA@IOAINKNM@Divide?5by?5zero?6?$AA@ 000000000010a49d     interrupt.c.o
+ 0002:000054ad       ??_C@_0P@BIMLKEH@Machine?5check?6?$AA@ 000000000010a4ad     interrupt.c.o
+ 0002:000054bc       ??_C@_06ICIKKOKO@Debug?6?$AA@ 000000000010a4bc     interrupt.c.o
+ 0002:000054c3       ??_C@_09IMDMFBPD@Hardware?6?$AA@ 000000000010a4c3     interrupt.c.o
+ 0002:000054cd       ??_C@_0BC@HBEKCBHA@Undefined?5opcode?6?$AA@ 000000000010a4cd     interrupt.c.o
+ 0002:000054df       ??_C@_09MFIAMFME@Reserved?6?$AA@ 000000000010a4df     interrupt.c.o
+ 0002:000054e9       ??_C@_0BA@ONCAJLOL@Bound?5exceeded?6?$AA@ 000000000010a4e9     interrupt.c.o
+ 0002:000054f9       ??_C@_0N@KONKHPBC@Invalid?5TSS?6?$AA@ 000000000010a4f9     interrupt.c.o
+ 0002:00005506       ??_C@_0BF@BEBBMPJD@Framebuffer?5is?5NULL?6?$AA@ 000000000010a506     console.c.o
+ 0002:0000551b       ??_C@_06HPPMHAIC@?6DONE?6?$AA@ 000000000010a51b     kmain.c.o
+ 0002:00005522       ??_C@_0BL@KCJAAGIG@Screen?5filled?5with?5white?4?6?$AA@ 000000000010a522     console.c.o
+ 0003:00000000       _lowlevel_addresses        000000000010b000     asmstubs.c.o
+ 0003:00000378       _machineInfo               000000000010b378     kmain.c.o
+ 0003:000003f4       __fltused                  000000000010b3f4     kprintf.c.o
 
- entry point at         0001:000006f0
+ entry point at         0001:00000ca0
 
  Static symbols
 
- 0001:000005f0       _clear_screen              00000000001015f0     console.c.o
- 0001:00000670       _fill_screen_white         0000000000101670     console.c.o
- 0001:00002a90       _real_va_arg               0000000000103a90     kprintf.c.o
- 0001:00002ac0       _stbsp__strlen_limited     0000000000103ac0     kprintf.c.o
- 0001:00002be0       _mod64                     0000000000103be0     kprintf.c.o
- 0001:00002cd0       _div64                     0000000000103cd0     kprintf.c.o
- 0001:00002df0       _mod                       0000000000103df0     kprintf.c.o
- 0001:00002e70       _div                       0000000000103e70     kprintf.c.o
- 0001:00002f10       _stbsp__lead_sign          0000000000103f10     kprintf.c.o
- 0001:00003000       _real_va_start             0000000000104000     kprintf.c.o
- 0001:00003120       _stbsp__count_clamp_callback 0000000000104120     kprintf.c.o
- 0001:00003150       _stbsp__clamp_callback     0000000000104150     kprintf.c.o
- 0001:00003370       _callback                  0000000000104370     kprintf.c.o
+ 0001:00000820       _clear_screen              0000000000101820     console.c.o
+ 0001:000008a0       _fill_screen_white         00000000001018a0     console.c.o
+ 0001:00000a31       reset_cs                   0000000000101a31     interrupt.c.o
+ 0001:00003050       _real_va_arg               0000000000104050     kprintf.c.o
+ 0001:00003080       _stbsp__strlen_limited     0000000000104080     kprintf.c.o
+ 0001:000031a0       _mod64                     00000000001041a0     kprintf.c.o
+ 0001:00003290       _div64                     0000000000104290     kprintf.c.o
+ 0001:000033b0       _mod                       00000000001043b0     kprintf.c.o
+ 0001:00003430       _div                       0000000000104430     kprintf.c.o
+ 0001:000034d0       _stbsp__lead_sign          00000000001044d0     kprintf.c.o
+ 0001:000035c0       _real_va_start             00000000001045c0     kprintf.c.o
+ 0001:000036e0       _stbsp__count_clamp_callback 00000000001046e0     kprintf.c.o
+ 0001:00003710       _stbsp__clamp_callback     0000000000104710     kprintf.c.o
+ 0001:00003930       _callback                  0000000000104930     kprintf.c.o
  0002:00000000       _font_data                 0000000000105000     console.c.o
- 0003:00000000       _foregroundColor           000000000010d000     console.c.o
- 0003:00000002       _backgroundColor           000000000010d002     console.c.o
- 0003:00000004       _stbsp__period             000000000010d004     kprintf.c.o
- 0003:00000005       _stbsp__comma              000000000010d005     kprintf.c.o
- 0003:00000006       _stbsp_vsprintfcb.hex      000000000010d006     kprintf.c.o
- 0003:00000019       _stbsp_vsprintfcb.hexu     000000000010d019     kprintf.c.o
- 0003:0000002c       _stbsp__digitpair          000000000010d02c     kprintf.c.o
- 0003:000000f8       _decl1                     000000000010d0f8     testsuite (1).c.o
- 0003:00000104       _decl2                     000000000010d104     testsuite (1).c.o
- 0003:00000108       _bg                        000000000010d108     testsuite (1).c.o
- 0003:00000148       _fg                        000000000010d148     testsuite (1).c.o
- 0003:00000188       _decl4                     000000000010d188     testsuite (1).c.o
- 0003:0000018c       _decl5                     000000000010d18c     testsuite (1).c.o
- 0003:00000194       _framebuffer               000000000010d194     console.c.o
- 0003:00000198       _pitch                     000000000010d198     console.c.o
- 0003:0000019c       _height                    000000000010d19c     console.c.o
- 0003:000001a0       _width                     000000000010d1a0     console.c.o
- 0003:000001a4       _currentRow                000000000010d1a4     console.c.o
- 0003:000001a8       _currentColumn             000000000010d1a8     console.c.o
+ 0003:000000c4       _foregroundColor           000000000010b0c4     console.c.o
+ 0003:000000c6       _backgroundColor           000000000010b0c6     console.c.o
+ 0003:000000c8       _stbsp__period             000000000010b0c8     kprintf.c.o
+ 0003:000000c9       _stbsp__comma              000000000010b0c9     kprintf.c.o
+ 0003:000000ca       _stbsp_vsprintfcb.hex      000000000010b0ca     kprintf.c.o
+ 0003:000000dd       _stbsp_vsprintfcb.hexu     000000000010b0dd     kprintf.c.o
+ 0003:000000f0       _stbsp__digitpair          000000000010b0f0     kprintf.c.o
+ 0003:000001bc       _sweet.TEST                000000000010b1bc     testsuite.c.o
+ 0003:000001c0       _framebuffer               000000000010b1c0     console.c.o
+ 0003:000001c4       _pitch                     000000000010b1c4     console.c.o
+ 0003:000001c8       _height                    000000000010b1c8     console.c.o
+ 0003:000001cc       _width                     000000000010b1cc     console.c.o
+ 0003:000001d0       _currentRow                000000000010b1d0     console.c.o
+ 0003:000001d4       _currentColumn             000000000010b1d4     console.c.o
+ 0003:000001d8       _idt                       000000000010b1d8     interrupt.c.o
+ 0003:00000360       _gdt                       000000000010b360     interrupt.c.o
