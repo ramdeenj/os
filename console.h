@@ -9,3 +9,7 @@ void console_putc(char c);
 
 struct MultibootInfo;       //forward declaration
 void console_init(struct MultibootInfo* info);
+
+void scroll_console();
+
+void console_invert_pixel(unsigned x, unsigned y);

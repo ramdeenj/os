@@ -122,3 +122,7 @@ struct MultibootInfo{
 #pragma pack(pop)
 
 void kmemcpy( void* dest, const void* src, unsigned count);
+
+void kmemcpy(void* dest, const void* start, unsigned size);
+
+void halt();

@@ -12,6 +12,7 @@ __asm__(
 #include "kprintf.h"
 #include "utils.h"
 #include "interrupt.h"
+#include "timer.h"
 
 struct MultibootInfo machineInfo;
 
@@ -25,10 +26,13 @@ void kmain(struct MultibootInfo* mbi)
    // Initialize interrupts
     interrupt_init();
 
-    sweet();
+    // Enable the timer
+    timer_init(12);
+    
+    // Enable interrupts
+    interrupt_enable();
 
-    // Output "\nDONE\n" to the serial port
-    serial_puts("\nDONE\n");
+    sweet();
 
     while(1);
     
