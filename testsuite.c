@@ -1,29 +1,26 @@
+#include "disk.h"
 #include "kprintf.h"
 
-void halt();
-unsigned get_uptime();
-
-unsigned div1000(unsigned numerator){
-    //0.001 * 2**32 = 4294967
-    unsigned long long magic = 4294967;
-
-    //compute:  (numerator+500) * 0.001 * 2**32
-    //This is the same as  numerator * 0.001 * 2**32 + 0.5 * 2**32
-    unsigned long long tmp = magic * (numerator+500);
-
-    //undo the multiply by 2**32
-    return (unsigned)(tmp >> 32);
+static void callback(int errorcode, void* vdata, void* callback_data)
+{
+    if( errorcode ){
+        kprintf("ERROR: %d\n",errorcode);
+        return;
+    }
+    char* data = (char*) vdata;
+    kprintf("Signature (should be 'EFI PART'): %.8s\n",
+        data+512);
+    kprintf("Partition 0 name: ");
+    char* p = data+1024+56;
+    for(int i=0;i<36;i+=2){
+        kprintf("%c",p[i]);
+    }
+    kprintf("\n");
+    return;
 }
 
-void sweet()
-{
-    unsigned nextprint=0;
-    while(1){
-        unsigned t = get_uptime();
-        if( t >= nextprint ){
-            kprintf("Uptime (seconds): %d\n", div1000(t) );
-            nextprint = t + 1000;
-        }
-        halt();
-    }
+void sweet(){
+    kprintf("BEFORE READ\n");
+    disk_read_sectors(0,8,callback,0);
+    kprintf("AFTER READ\n");
 }

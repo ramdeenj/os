@@ -1,4 +1,5 @@
 #pragma once
+#pragma pack(push, 1)
 
 #define u8_LOW_MASK 0x0F
 #define u8_HIGH_MASK 0xF0
@@ -7,18 +8,13 @@
 #define u32_LOW_MASK 0x0000FFFF
 #define u32_HIGH_MASK 0xFFFF0000
 
+#define NULL ((void*)0)
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
 
-void outb(u16 port, u8 value);
-u8 inb(u16 port);
-
-// MultibootInfo
-#pragma pack(push,1)
-
-struct MB_MemInfo
-{
+struct MB_MemInfo{
     u32 size;
     u32 addr;
     u32 padding;
@@ -28,57 +24,51 @@ struct MB_MemInfo
     u32 attributes;
 };
 
-struct MB_MemoryMapping
-{
+struct MB_MemoryMapping{
     u32 length;
     struct MB_MemInfo* addr;
 };
 
-struct MB_MemorySizes
-{
+struct MB_MemorySizes{
     u32 lower;
     u32 upper;
 };
 
-struct MB_BootDevice
-{
+struct MB_BootDevice{
     u32 device;
 };
-struct MB_CommandLine
-{
+
+struct MB_CommandLine{
     char* cmdline;
 };
 
-struct MB_Modules
-{
+struct MB_Modules{
     u32 count;
     u32 addr;
 };
-struct MB_Symbols
-{
+
+struct MB_Symbols{
     u32 syms[4];
 };
 
-struct MB_Drives
-{
+struct MB_Drives{
     u32 length;
     u32 addr;
 };
-struct MB_Config
-{
-    void* ptr;
-};
-struct MB_Loader
-{
-    char* name;
-};
-struct MB_AdvancedPowerManagement
-{
+
+struct MB_Config{
     void* ptr;
 };
 
-struct MB_VideoBiosExtensions
-{
+struct MB_Loader{
+    char* name;
+};
+
+struct MB_AdvancedPowerManagement{
+    void* ptr;
+};
+
+struct MB_VideoBiosExtensions{
     u32 control;
     u32 mode_info;
     u32 mode;
@@ -86,8 +76,8 @@ struct MB_VideoBiosExtensions
     u32 offset;
     u32 length;
 };
-struct MB_Framebuffer
-{
+
+struct MB_Framebuffer{
     u32 addr;
     u32 addr64;
     u32 pitch;
@@ -121,8 +111,27 @@ struct MultibootInfo{
 
 #pragma pack(pop)
 
-void kmemcpy( void* dest, const void* src, unsigned count);
+void outb(u16 port, u8 value);
+u8 inb(u16 port);
 
 void kmemcpy(void* dest, const void* start, unsigned size);
 
 void halt();
+
+u16 inw(u16 port);
+void outw(u16 port, u16 value);
+u32 inl(u16 port);
+void outl(u16 port, u32 value);
+
+struct QueueNode{
+    struct QueueNode* next;
+    void* item;
+};
+
+struct Queue{
+    struct QueueNode* head;
+    struct QueueNode* tail;
+};
+
+int queue_put(struct Queue* Q, void* data);
+void* queue_get(struct Queue* Q);
