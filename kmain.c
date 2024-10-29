@@ -20,8 +20,7 @@ void sweet();
 
 void kmain2() {
     kprintf("START\n");
-
-    readRoot();
+    sweet();
 }
 
 void kmain(struct MultibootInfo* mbi) {
