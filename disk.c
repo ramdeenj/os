@@ -29,6 +29,14 @@ static void enable_busmaster(u32 addr) {
 }
 
 void disk_init() {
+    physicalRegionDescriptor = (struct PhysicalRegionDescriptor*) kmalloc(sizeof(struct PhysicalRegionDescriptor));
+    unsigned seg1 = ((unsigned)(physicalRegionDescriptor))/65536;
+    unsigned seg2 = ((unsigned)(physicalRegionDescriptor)+sizeof(physicalRegionDescriptor))/65536;
+    if(seg1 != seg2)
+        panic("Physical region descriptor crosses 64KB boundary");
+    if(seg1 % 4)
+        panic("kmalloc gave address that is not multiple of 4");
+
     u32 addr = pci_scan_for_device(PCI_DISK_CLASS,
                                     PCI_DISK_SUBCLASS);
     if(addr == 0) {
@@ -101,14 +109,6 @@ static void dispatch_request(struct Request* req) {
     outb(dmaBase,0);    //disable DMA
     outb(dmaBase,8);    //8=read,0=write
 
-    physicalRegionDescriptor = (struct PhysicalRegionDescriptor*) kmalloc(sizeof(struct PhysicalRegionDescriptor));
-    unsigned seg1 = ((unsigned)(physicalRegionDescriptor))/65536;
-    unsigned seg2 = ((unsigned)(physicalRegionDescriptor)+sizeof(physicalRegionDescriptor))/65536;
-    if(seg1 != seg2)
-        panic("Physical region descriptor crosses 64KB boundary");
-    if(seg1 % 4)
-        panic("kmalloc gave address that is not multiple of 4");
-
     physicalRegionDescriptor->address = req->buffer;
     physicalRegionDescriptor->byteCount = req->count*512;
     physicalRegionDescriptor->flags = 0x8000;   //this is the last PRD
@@ -179,7 +179,7 @@ void disk_read_sectors(
     
     struct Request* req = (struct Request*) kmalloc(
                 sizeof(struct Request)
-   );
+    );
     if(!req) {
         callback(ENOMEM, NULL, callback_data);
         return;
@@ -215,6 +215,41 @@ struct GUID linuxGUID = {
 
 struct VBR vbr;
 
+#define MAX_DISK_SIZE_MB 128
+
+u32 fat[MAX_DISK_SIZE_MB*1024*1024 / 4096];
+static int fatSectorsRemaining;
+static disk_metadata_callback_t kmain_callback;
+
+void read_fat_callback(int errorcode, void* data, void* p) {
+    if(errorcode != SUCCESS)
+        panic("Cannot read FAT!");
+
+    u32 i = (u32)p;
+
+    // Each sector has 128 FAT entries in it and is 512 bytes in size
+    kmemcpy(fat + 128*i, data, 512);
+    --fatSectorsRemaining;
+    if(fatSectorsRemaining == 0)
+        kmain_callback();
+}
+
+void read_fat(disk_metadata_callback_t f) {
+    kmain_callback = f;
+    fatSectorsRemaining = vbr.sectors_per_fat;
+    unsigned fatStart = vbr.first_sector + vbr.reserved_sectors;
+
+    // This fires off a bunch of overlapped reads
+    for(u32 i = 0; i < vbr.sectors_per_fat; i++) {
+        disk_read_sectors(
+            fatStart+i,
+            1,
+            read_fat_callback,
+            (void*)i
+        );
+    }
+}
+
 static void read_vbr_callback( int errorcode, void* sectorData, void* kmain_callback) {
     // Check for errors
     if( errorcode != SUCCESS ){
@@ -227,7 +262,7 @@ static void read_vbr_callback( int errorcode, void* sectorData, void* kmain_call
 
     // Call the kmain call back
     disk_metadata_callback_t f = (disk_metadata_callback_t) kmain_callback;
-    f();    
+    read_fat(f);  
 }
 
 static void read_partition_table_callback(int errorcode, void* sectorData, void* kmain_callback) {
@@ -443,4 +478,8 @@ void readRoot() {
 
     // Read the root sector
     disk_read_sectors(rootSectorNum, 2, listFiles, 0);
+}
+
+u32* getFAT() {
+    return fat;
 }
