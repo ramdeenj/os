@@ -1,30 +1,15 @@
-#if __STDC_HOSTED__
-    #include <stdint.h>
-    #include <stddef.h>
-    typedef uint32_t u32;
-#else
-    #include "utils.h"
-    #define NULL ((void*)0)
-#endif
+#include "memory.h"
 
-
-typedef struct Header_{
-    u32 used: 1,
-        order: 5,
-        prev: 13,
-        next: 13;
-} Header;
-
-#if __STDC_HOSTED__
-    char heap[524288];
-#else
-    char* heap = (char*)0x10000;
-#endif
-
-#define HEAP_ORDER 19
+char* heap = (char*)0x10000;
 Header* freeList[HEAP_ORDER+1];
 
-static Header* getNext(Header* h){
+void memory_init() {
+    Header* initialBlock = (Header*)heap;
+    initHeader(initialBlock, HEAP_ORDER);
+    freeList[HEAP_ORDER] = initialBlock;
+}
+
+static Header* getNext(Header* h) {
     unsigned delta = (h->next) << 6;
     Header* h2 = (Header*)(heap+delta);
     if( h == h2 )
@@ -32,7 +17,7 @@ static Header* getNext(Header* h){
     return h2;
 }
 
-static void setNext(Header* h, Header* next ){
+static void setNext(Header* h, Header* next ) {
     if( next == NULL )
         next = h;
     char* c = (char*) next;
@@ -41,15 +26,15 @@ static void setNext(Header* h, Header* next ){
     h->next = delta;
 }
 
-static Header* getPrev(Header* h){
+static Header* getPrev(Header* h) {
     unsigned delta = (h->prev) << 6;
-    Header* h2 = (Header*)(heap+delta);
-    if( h == h2 )
+    Header* h2 = (Header*)(heap + delta);
+    if(h == h2)
         return NULL;
     return h2;
 }
 
-static void setPrev(Header* h, Header* prev ){
+static void setPrev(Header* h, Header* prev ) {
     if( prev == NULL )
         prev = h;
     char* c = (char*) prev;
@@ -58,127 +43,203 @@ static void setPrev(Header* h, Header* prev ){
     h->prev = delta;
 }
 
-
-static void initHeader(Header* h, unsigned order){
+void initHeader(Header* h, unsigned order){
     h->used=0;
-    h->order=order;
-    setPrev(h,NULL);
+    h->order = order;
     setNext(h,NULL);
+    setPrev(h,NULL);
 }
 
-void memory_init(void){
-    for(unsigned i=0;i<HEAP_ORDER;++i){
-        freeList[i] = NULL;
-        freeList[HEAP_ORDER] = (Header*)heap;
-        initHeader(freeList[HEAP_ORDER],HEAP_ORDER);
-    }
+void addToFreeList(Header *h) {
+    // Get the order
+    unsigned order = h->order;
+
+    // Set the next pointer
+    setNext(h, freeList[order]);
+
+    // Check to see if the order is used
+    if(freeList[order] != NULL)
+        // Set the previous pointer
+        setPrev(freeList[order], h);
+
+    // Set the new head of the free list to h
+    freeList[order] = h;
+
+    // Set the previous pointer of h
+    setPrev(h, NULL);
 }
 
-
-void removeFirstNode(unsigned i){
-     Header* h = freeList[i];
-     Header* n = getNext(h);
-     if(n)
-         setPrev(n,NULL);
-     freeList[i] = n;
-}
-
-
-void removeNode(Header* h){
-    Header* p = getPrev(h);
-    Header* n = getNext(h);
-    if(p)
-        setNext(p,n);
-    if(n)
-        setPrev(n,p);
-
-    //if we're removing the first node,
-    //need to update head
-    if( freeList[h->order] == h )
-        freeList[h->order] = n;
-}
-
-
-void prependNode( Header* h ){
-     unsigned i = h->order;
-     Header* n = freeList[i];
-     setPrev(h, NULL);
-     setNext(h, n);
-     if(n)
-         setPrev(n,h);
-     freeList[i] = h;
-}
-
-
-void splitBlock(unsigned i){
+Header* removeFromFreeList(unsigned i) {
     Header* h = freeList[i];
-    removeFirstNode(i);
-    h->order = h->order-1;
-    char* c = (char*) h;
-    c += (1<<h->order);
-    Header* h2 = (Header*) c;
-    initHeader(h2,h->order);
-    prependNode(h);
-    prependNode(h2);
+
+    // Check if the list is empty
+    if (h == NULL) {
+        return NULL;
+    }
+
+    // Set head of the free list to the next block
+    freeList[i] = getNext(h);
+
+    // Check for a new head exists
+    if (freeList[i] != NULL) {
+        // Set its prev pointer to NULL
+        setPrev(freeList[i], NULL);
+    }
+
+    // Clear the pointers of the removed block
+    setNext(h, NULL);
+    setPrev(h, NULL);
+
+    return h;
 }
 
+void removeThisNodeFromFreeList(Header* h){
+    unsigned order = h->order;
 
-void* kmalloc(u32 size){
+    // Check if the node is the head of the list
+    if (freeList[order] == h) {
+        freeList[order] = getNext(h);
+    }
+
+    // Update next and prev pointers
+    if (getNext(h)) {
+        setPrev(getNext(h), getPrev(h));
+    }
+    if (getPrev(h)) {
+        setNext(getPrev(h), getNext(h));
+    }
+
+    // Clear the pointers
+    setNext(h, NULL);
+    setPrev(h, NULL);
+}
+
+void splitBlockOfOrder(unsigned i) {
+    // Take block off freeList[i]
+    Header* h = removeFromFreeList(i);
+
+    // Split it in half
+    h->order--;
+    Header* h2 = (Header *)((char *)h + (1 << (h->order)));
+    initHeader(h2, h->order);
+    
+    // Add two to freeList
+    addToFreeList(h);
+    addToFreeList(h2);
+}
+
+unsigned roundUpToPowerOf2(unsigned needed_bytes) {
+    unsigned power = 1;
+
+    while(power < needed_bytes)
+        power *= 2;
+
+    return power;
+}
+
+void* kmalloc(u32 size) {
+    // Add the bytes used for the header
     size += sizeof(Header);
-    if( size > (1<<HEAP_ORDER) )
-        return NULL;
 
-    //minimum size = 64 bytes = 2**6
-    unsigned order = 6;
-    while( (1<<order) < size )
-        order++;
+    // Order I want
+    unsigned o = 6;
 
-    unsigned i = order;
-    while( i <= HEAP_ORDER && freeList[i] == NULL )
+    while((1 << o) < size)
+        o++;
+
+    // Order I have
+    unsigned i = o;
+
+    // Iterate through the freeList checking for free memory blocks
+    while(i <= HEAP_ORDER && !freeList[i])
         i++;
 
-    if( i > HEAP_ORDER )
-        return NULL;        //not enough memory
+    // Check if no block of free memory was found
+    if(i > HEAP_ORDER)
+        return NULL;
 
-    while( i > order ){
-         splitBlock(i);
-         i--;
+    // Split the freelist map
+    while(i > o) {
+        splitBlockOfOrder(i);
+        i--;
     }
 
-    Header* h = freeList[i];
-    removeFirstNode(i);
+    Header* h = removeFromFreeList(o);
     h->used=1;
-    char* c = (char*) h;
-    return c + sizeof(Header);
+    return ((char*)h + sizeof(Header));
 }
 
-
-Header* getBuddy(Header* h){
+Header* getBuddy(Header *h) {
     char* c = (char*) h;
-    unsigned offset = c-heap;
-    offset ^= (1<<h->order);
-    c = heap + offset;
-    return (Header*)c;
+    unsigned offset = c - heap;
+
+    offset = offset ^ (1 << h->order);
+
+    return (Header*)(heap + offset);
 }
 
-void kfree(void* v){
+Header* combine(Header* h, Header* b) {
+    if(h > b)
+        h=b;
+
+    h->order++;
+    addToFreeList(h);
+
+    return h;
+}
+
+void kfree(void* v) {
     char* c = (char*) v;
     Header* h = (Header*)(c-sizeof(Header));
     h->used = 0;
-    prependNode(h);
+    addToFreeList(h);
+
     while(1){
         if( h->order == HEAP_ORDER )
             return;     //entire heap is free
         Header* b = getBuddy(h);
         if( b->used == 0 && b->order == h->order ){
-            removeNode(h);
-            removeNode(b);
-            if(b<h)
+            removeThisNodeFromFreeList(h);
+            removeThisNodeFromFreeList(b);
+            if(h > b)
                 h=b;
+
             h->order++;
-            prependNode(h);
+            addToFreeList(h);
         } else {
-            return;
+            return;     //done
         }
     }
+}
+
+// Return 0 if same
+// Return -1 if ptr1 < ptr2
+// Return 1 if ptr1 > ptr2
+int kmemcmp(const void* ptr1, const void* ptr2, const unsigned numOfBytes) {
+    const unsigned char* p1 = (const unsigned char*) ptr1;
+    const unsigned char* p2 = (const unsigned char*) ptr2;
+
+    // Iterate through each byte in memory
+    for(unsigned i = 0; i < numOfBytes; i++) {
+        // Check if p1 is less than p2
+        if(p1[i] < p2[i])
+            return -1;
+        // Check if p1 is greater than p2
+        else if(p1[i] > p2[i])
+            return 1;
+    }
+
+    return 0;
+}
+
+void* kmemset(void* dest, const int value, const unsigned count) {
+    unsigned char* ptr = (unsigned char*)dest;
+    
+    // Iterate through each byte in memory
+    for(unsigned i = 0; i < count; i++) {
+        // Set the memory data
+        ptr[i] = (unsigned char)value;
+    }
+
+    return dest;
 }

@@ -13,14 +13,17 @@ __asm__(
 #include "interrupt.h"
 #include "timer.h"
 #include "disk.h"
+#include "exec.h"
 
 struct MultibootInfo machineInfo;
 
-void sweet();
+// Remove or comment out the declaration of 'sweet()'
+// void sweet();
 
 void kmain2() {
-    kprintf("START\n");
-    sweet();
+    exec("HELLO.EXE", 0x400000, exec_transfer_control, 0);
+    // Comment out or remove the call to 'sweet()'
+    // sweet();
 }
 
 void kmain(struct MultibootInfo* mbi) {
@@ -36,21 +39,22 @@ void kmain(struct MultibootInfo* mbi) {
     // Enable the timer
     timer_init(12);
 
-    // Enable memory
+    // Initialize memory management
     memory_init();
 
-    // Enable to disk system
+    // Initialize the disk system
     disk_init();
 
     // Enable interrupts
     interrupt_enable();
 
-    // Responsible for reading out our VBR
+    // Read the Volume Boot Record and then call 'kmain2()'
     disk_read_metadata(kmain2);
 
-    //sweet();
+    // Remove or comment out any additional calls to 'sweet()'
+    // sweet();
 
-    // Dummy hold
+    // Infinite loop to prevent the kernel from exiting
     while(1)
         halt();
 }
