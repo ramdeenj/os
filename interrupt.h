@@ -61,7 +61,7 @@ extern void* lowlevel_addresses[];
 
 void interrupt_init();
 void gdt_init();
-void idt_inti();
+void idt_init();
 void highlevel_handler(struct InterruptContext* ctx);
 
 #define MAX_HANDLERS 4
@@ -93,7 +93,7 @@ void timerHandler(struct InterruptContext* ctx);
 struct TaskStateSegment{
     u32 mustBeZero;
     u32 esp;
-    u32 ss;     //stack segment
+    u32 ss;     
     u32 unused[15];
 };
 #pragma pack(pop)
