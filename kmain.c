@@ -42,6 +42,9 @@ void kmain(struct MultibootInfo* mbi) {
     // Initialize memory management
     memory_init();
 
+    // To enable paging
+    pagingInit(mbi);
+
     // Initialize the disk system
     disk_init();
 

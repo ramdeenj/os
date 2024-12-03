@@ -12,50 +12,36 @@ TIMEOUT = 4
 
 P=None
 
+r1 = random.randrange(0,10000)
+r2 = random.randrange(0,10000)
+r3 = random.randrange(0,10000)
 
-class Expectation:
-    def __init__(self,a,b):
-        self.shortname=a
-        self.longname=b
-        self.shortok=False
-        self.longok=False
+hello1 = f"""
 
+extern void printf(const char* fmt, ... );
+int main(){{
+    printf("FOOBY_A {r1}\\n");
+    char* p = (char*) 0x1234;
+    *p = 42;
+    printf("FOOBY_B {r2}\\n");
+    while(1){{}}
+}}
+"""
+
+hello2 = f"""
+
+extern void printf(const char* fmt, ... );
+int main(){{
+    printf("FOOBY_C {r3}\\n");
+    while(1){{}}
+}}
+"""
 
 
 #os.environ["FOOL_NOW"] = "2023-Sep-08 01:02:04"
 expectedDate = os.getenv("FOOL_NOW",None)
 deletedFname=None
 names=[]
-
-def modifytestsuite():
-    global deletedFname
-    global names
-
-    with open("testsuite.py","r") as fp:
-        py = fp.read()
-
-
-
-    toRemove = f"article{random.choice([1,2,3,4,5,6,7])}.txt"
-    magicnumber = random.randrange(0,10000)
-
-    i = py.find("#!!")
-    assert i != -1
-    j = py.find("#!!",i+1)
-    assert j != -1
-    py = py[:i] + f'REMOVE="{toRemove}"\n' + py[j:]
-
-    with open("testsuite.c","r") as fp:
-        c = fp.read()
-
-    c = f'#define REMOVED "{toRemove}"\n#define MAGICNUMBER "{magicnumber}"\n' + c
-
-    with open("testsuite.py","w") as fp:
-        fp.write(py)
-    with open("testsuite.c","w") as fp:
-        fp.write(c)
-
-    return magicnumber
 
 async def getLine(timeLeft):
     line = ""
@@ -113,6 +99,7 @@ async def qprompt():
 
 
 async def screencap(filename):
+    global P
     tf = tempfile.NamedTemporaryFile(delete=False)
     tf.close()
     NAME = tf.name.replace("/","//")
@@ -130,56 +117,65 @@ async def screencap(filename):
         os.unlink(tf.name)
 
 
+async def doIt():
+    global P
+    P = await asyncio.create_subprocess_exec(
+                sys.executable, "make.py",
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                limit=65536
+    )
+
+    deadline = time.time() + TIMEOUT
+
+    data = []
+
+    while True:
+        timeLeft = deadline - time.time()
+        line = await getLine(timeLeft)
+        if line == None:
+            break
+        line=line.strip()
+        data.append(line)
+
+    await terminate()
+
+    return data
+
+
 async def main():
     global P
 
-    with open("testsuite.py","rb") as fp:
-        testsuitepy = fp.read()
-    with open("testsuite.c","rb") as fp:
-        testsuitec = fp.read()
+    with open("user/hello.c","rb") as fp:
+        helloc = fp.read()
 
     try:
-        ok=False
-        magicnumber = modifytestsuite()
-        goal = f"All OK! {magicnumber}"
+        with open("user/hello.c","w") as fp:
+            fp.write(hello1)
+        data = await doIt()
+        data = "\n".join(data)
+        if f"FOOBY_A {r1}" in data and f"FOOBY_B {r2}" not in data:
+            print("First test OK: Page fault occurred")
+        else:
+            print("First test failed: Page fault did not occur")
+            return
 
-        P = await asyncio.create_subprocess_exec(
-                    sys.executable, "make.py",
-                    stdin=asyncio.subprocess.PIPE,
-                    stdout=asyncio.subprocess.PIPE,
-                    limit=65536
-        )
+        with open("user/hello.c","w") as fp:
+            fp.write(hello2)
+        data = await doIt()
+        data = "\n".join(data)
+        if f"FOOBY_C {r3}" in data:
+            print("Second test OK: Page fault did not occur")
+        else:
+            print("Second test failed: Program did not execute")
+            return
 
-        deadline = time.time() + TIMEOUT
-
-        data = []
-
-        while True:
-            timeLeft = deadline - time.time()
-            line = await getLine(timeLeft)
-            if line == None:
-                print("Timed out")
-                return
-            line=line.strip()
-            if line == goal:
-                ok=True
-                break
-            data.append(line)
-
-        await terminate()
+        print("All OK!")
 
     finally:
-        with open("testsuite.py","wb") as fp:
-            fp.write(testsuitepy)
-        with open("testsuite.c","wb") as fp:
-            fp.write(testsuitec)
+        with open("user/hello.c","wb") as fp:
+            fp.write(helloc)
         await terminate()
-
-
-    if ok:
-        print("\n\nTest harness says OK!\n\n")
-    else:
-        print("\n\nNot OK\n\n")
 
 
 asyncio.run(main())

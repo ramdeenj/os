@@ -78,6 +78,7 @@ void panic2(void* eip, const char* msg);
 void divideByZero(struct InterruptContext* ctx);
 void illegalOpcode(struct InterruptContext* ctx);
 void generalFault(struct InterruptContext* ctx);
+void pageFaultHandler(struct InterruptContext* ctx);
 
 void ackPic1(struct InterruptContext* ctx);
 void ackPic2(struct InterruptContext* ctx);
@@ -93,7 +94,7 @@ void timerHandler(struct InterruptContext* ctx);
 struct TaskStateSegment{
     u32 mustBeZero;
     u32 esp;
-    u32 ss;     
+    u32 ss;     //stack segment
     u32 unused[15];
 };
 #pragma pack(pop)
